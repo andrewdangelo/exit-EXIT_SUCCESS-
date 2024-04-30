@@ -1,3 +1,9 @@
+/* Author: Sean Melone
+Date: 4/29
+Description: Header file with definition of FieldInhabitant superclass
+*/
+
+
 #ifndef FIELDINHABITANT_H
 #define FIELDINHABITANT_H
 
