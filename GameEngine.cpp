@@ -8,7 +8,7 @@ void GameEngine::initializeGame(){
 	timer = 0;
 }
 
-void initVeggies(){
+void GameEngine::initVeggies(){
 
 }
 
