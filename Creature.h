@@ -16,9 +16,9 @@ public:
     void setSymbol(const string& symbol);
 
 private:
-    int m_x;
-    int m_y;
-    string m_symbol;
+    int x;
+    int y;
+    string symbol;
 };
 
-#endif // CREATURE_H
+#endif

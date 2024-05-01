@@ -11,25 +11,25 @@ Creature::Creature(int x, int y, const string& symbol) : FieldInhabitant(symbol)
 }
 
 int Creature::getX() const {
-    return m_x;
+    return x;
 }
 
 void Creature::setX(int x) {
-    m_x = x;
+    this -> x = x;
 }
 
 int Creature::getY() const {
-    return m_y;
+    return y;
 }
 
 void Creature::setY(int y) {
-    m_y = y;
+    this -> y = y;
 }
 
 string Creature::getSymbol() const {
-    return m_symbol;
+    return symbol;
 }
 
 void Creature::setSymbol(const string& symbol) {
-    m_symbol = symbol;
+    this -> symbol = symbol;
 }
