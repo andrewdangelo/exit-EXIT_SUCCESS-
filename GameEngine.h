@@ -1,7 +1,6 @@
 #ifndef GAMEENGINE_H
 #define GAMEENGINE_H
 
-#include "FieldInhabitant.h"
 #include "Veggie.h"
 #include "Captain.h"
 #include "Rabbit.h"
