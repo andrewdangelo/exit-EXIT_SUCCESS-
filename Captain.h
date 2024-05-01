@@ -10,7 +10,7 @@
 #include <string>
 #include <iomanip>
 #include <vector>
-// #include "Veggie.h"
+#include "Veggie.h"
 
 using namespace std;
 #include "Creature.h" 

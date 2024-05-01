@@ -7,7 +7,7 @@
 #include <iostream>
 #include <string>
 
-Captain::Captain(int x, int y) : Creature(x, y, string "V") {
+Captain::Captain(int x, int y) : Creature(x, y, "V") {
  }
 
     vector<Veggie*> Captain::getCaptainVegs()

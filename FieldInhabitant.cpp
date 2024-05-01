@@ -5,6 +5,9 @@ Description: file with definitions of FieldInhabitant functions
 
 
 #include "FieldInhabitant.h"
+#include <iostream>
+#include <string>
+
 FieldInhabitant::FieldInhabitant(string symbol){
 	this -> symbol = symbol;
 }

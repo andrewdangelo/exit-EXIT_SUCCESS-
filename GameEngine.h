@@ -18,8 +18,8 @@ private:
 	Captain* captain;
 	vector<Rabbit> rabbits;
 
-	void initVeggies();
-	void initCaptain();
+	void initVeggies(); //Andrews
+	void initCaptain(); 
 	void spawnRabbits();
 	void moveCptVertical(int);
 	void moveCptHorizontal(int);

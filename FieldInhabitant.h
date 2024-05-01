@@ -9,17 +9,18 @@ Description: Header file with definition of FieldInhabitant superclass
 
 
 #include <iostream>
+#include <string>
 
 using namespace std;
 
 
 class FieldInhabitant {
-protected:
-	string symbol;
-public:
-	FieldInhabitant(string);
-	string getSymbol();
-	virtual ~FieldInhabitant();
+	protected:
+		string symbol;
+	public:
+		FieldInhabitant(string);
+		string getSymbol();
+		virtual ~FieldInhabitant();
 };
 
 #endif
