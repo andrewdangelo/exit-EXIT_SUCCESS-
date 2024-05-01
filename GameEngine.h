@@ -1,7 +1,7 @@
 #ifndef GAMEENGINE_H
 #define GAMEENGINE_H
 
-#include "FieldInhabitant"
+#include "FieldInhabitant.h"
 #include "Veggie.h"
 #include "Captain.h"
 #include "Rabbit.h"
@@ -13,7 +13,7 @@ private:
 	const int MAXNUMBEROFRABBITS = 5;
 	const int RABBITPOINTS = 5;
 
-	FieldInahbitant*** field;
+	FieldInhabitant*** field;
 	int height, width, score, timer;
 	Captain* captain;
 	vector<Rabbit> rabbits;
