@@ -3,6 +3,9 @@
  Description: The program defines Captain class.*/
 
 #include "Captain.h"
+#include "Veggie.h"
+#include <iostream>
+#include <string>
 
 Captain::Captain(int x, int y) : Creature(x, y, string "V") {
  }

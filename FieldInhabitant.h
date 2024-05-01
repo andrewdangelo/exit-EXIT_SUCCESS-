@@ -13,13 +13,13 @@ Description: Header file with definition of FieldInhabitant superclass
 using namespace std;
 
 
-class FieldInahbitant {
+class FieldInhabitant {
 protected:
 	string symbol;
 public:
-	FieldInahbitant(string);
+	FieldInhabitant(string);
 	string getSymbol();
-	virtual ~FieldInahbitant();
+	virtual ~FieldInhabitant();
 };
 
 #endif

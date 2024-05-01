@@ -5,12 +5,12 @@ Description: file with definitions of FieldInhabitant functions
 
 
 #include "FieldInhabitant.h"
-FieldInahbitant::FieldInahbitant(string symbol){
+FieldInhabitant::FieldInhabitant(string symbol){
 	this -> symbol = symbol;
 }
-FieldInahbitant::~FieldInahbitant(){
+FieldInhabitant::~FieldInhabitant(){
 }
-string FieldInahbitant::getSymbol(){
+string FieldInhabitant::getSymbol(){
 	return symbol;
 }
 

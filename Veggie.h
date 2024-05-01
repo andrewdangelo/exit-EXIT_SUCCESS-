@@ -4,7 +4,7 @@
 #include "FieldInhabitant.h"
 
 // inherit superclass with public access
-class Veggie : public FieldInahbitant {
+class Veggie : public FieldInhabitant {
 private:
 	string name;
 	int points;
