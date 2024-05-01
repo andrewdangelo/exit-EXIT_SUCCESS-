@@ -8,6 +8,10 @@ void GameEngine::initializeGame(){
 	timer = 0;
 }
 
+void initVeggies(){
+
+}
+
 void GameEngine::intro(){
 
 }
@@ -22,5 +26,9 @@ void GameEngine::printField(){
 		cout << '\n';
 	}
 
+}
+
+int GameEngine::getScore(){
+	return score;
 }
 
