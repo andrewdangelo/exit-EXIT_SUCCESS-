@@ -1,8 +1,19 @@
 #include "GameEngine.h"
 
 
+void GameEngine::initializeGame(){
+	initVeggies();
+	initCaptain();
+	score = 0;
+	timer = 0;
+}
+
+void GameEngine::initVeggies(){
+
+}
+
 void GameEngine::intro(){
-	// TODO: add print statements as stated in project document
+
 }
 
 void GameEngine::printField(){
@@ -15,5 +26,9 @@ void GameEngine::printField(){
 		cout << '\n';
 	}
 
+}
+
+int GameEngine::getScore(){
+	return score;
 }
 
