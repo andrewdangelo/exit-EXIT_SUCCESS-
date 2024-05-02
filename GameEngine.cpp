@@ -441,6 +441,63 @@ void GameEngine::moveCptHorizontal(int direction){
 	}
 }
 
+void GameEngine::moveCaptain(){
+	// Get the current position of the Captain
+	int x = captain->getX();
+	int y = captain->getY();
+
+	// Remove the Captain from the field
+	field[y][x] = nullptr;
+
+	// Move the Captain based on user input
+	char direction;
+	cout << "Enter a direction (WASD): ";
+	cin >> direction;
+	direction = tolower(direction); // Convert input to lowercase
+
+	switch (direction) {
+		case 'w': // Up
+			if (y > 0) {
+				moveCptVertical(0);
+			} else {
+				cout << "Invalid move! You cannot move up." << endl;
+			}
+			break;
+		case 's': // Down
+			if (y < height - 1) {
+				moveCptVertical(1);
+			} else {
+				cout << "Invalid move! You cannot move down." << endl;
+			}
+			break;
+		case 'a': // Left
+			if (x > 0) {
+				moveCptHorizontal(0);
+			} else {
+				cout << "Invalid move! You cannot move left." << endl;
+			}
+			break;
+		case 'd': // Right
+			if (x < width - 1) {
+				moveCptHorizontal(1);
+			} else {
+				cout << "Invalid move! You cannot move right." << endl;
+			}
+			break;
+	}
+}
+
+void GameEngine::gameOver(){
+	cout << "Game Over!" << endl;
+	cout << "You managed to harvest the following vegetables:" << endl;
+	for (auto& veggie : captain->getCaptainVegs()) {
+		cout << veggie->getName() << endl;
+	}
+	cout << "Your score was: " << score << endl;
+	cout << "Remaining Veggies: " << remainingVeggies() << endl;
+	cout << "Thank you for playing Captain Veggie!" << endl;
+}
+
 
 
 int main(){
