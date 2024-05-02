@@ -1,4 +1,6 @@
 #include "GameEngine.h"
+#include "Rabbit.h"
+#include <cstdlib>
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -8,8 +10,10 @@
 using namespace std;
 
 
+
 void GameEngine::initializeGame(){
 	//initVeggies() called
+	srand(time(0));
 	initVeggies();
 
 	initCaptain();
@@ -72,9 +76,6 @@ void GameEngine::initVeggies(){
 		}
 	}
 
-	// Seed the random number generator
-	srand(time(0));
-
 	// Populate the field with Veggie objects
 	int numberOfVeggies = NUMBEROFVEGGIES;
 	while (numberOfVeggies > 0) {
@@ -100,7 +101,6 @@ void GameEngine::initVeggies(){
 
 
 void GameEngine::initCaptain(){
-    srand(time(0));
 
     int x, y;
 
@@ -116,15 +116,13 @@ void GameEngine::initCaptain(){
     field[y][x] = captain;
 }
 
-
 void GameEngine::spawnRabbits(){
 	if (rabbits.size() < MAXNUMBEROFRABBITS) {
 
 		// Seed the random number generator
-		srand(time(0));
 
-		int numberOfRabbits = MAXNUMBEROFRABBITS - rabbits.size();
-		while (numberOfRabbits > 0) {
+		bool isSpawned = false;
+		while (!isSpawned) {
 			// Generate random coordinates
 			int x = rand() % width;
 			int y = rand() % height;
@@ -132,12 +130,11 @@ void GameEngine::spawnRabbits(){
 			// Check if the location is occupied
 			if (field[y][x] == nullptr) {
 				// Create a new Rabbit object and add it to the field and vector of rabbits
-				Rabbit newRabbit(x, y);
-				field[y][x] = &newRabbit;
-				rabbits.push_back(&newRabbit);
-
-				// Decrease the number of remaining rabbits
-				numberOfRabbits--;
+				Rabbit* newRabbit = new Rabbit(x,y);
+				field[y][x] = newRabbit;
+				rabbits.push_back(newRabbit);
+				isSpawned = true;
+				cout << "Rabbit spawned\n";
 			}
 		}
 	}
@@ -177,8 +174,6 @@ void GameEngine::intro(){
 }
 
 void GameEngine::printField(){
-	// TODO: add border
-
 	for(int i = 0; i < width + 2; i++){
 		cout << "# ";
 	}
@@ -219,47 +214,48 @@ void GameEngine::moveRabbits(){
 		field[y][x] = nullptr;
 
 		// Move the rabbit in the chosen direction
+		//todo make sure to check for rabbits
 		switch (direction) {
 			case 0: // Up
-				if (y - 1 >= 0) {
+				if (y - 1 >= 0 && dynamic_cast<Rabbit*>(field[y-1][x]) == nullptr) {
 					rabbits[i]->setY(y - 1);
 				}
 				break;
 			case 1: // Down
-				if (y + 1 < height) {
+				if (y + 1 < height && dynamic_cast<Rabbit*>(field[y+1][x]) == nullptr) {
 					rabbits[i]->setY(y + 1);
 				}
 				break;
 			case 2: // Left
-				if (x - 1 >= 0) {
+				if (x - 1 >= 0 && dynamic_cast<Rabbit*>(field[y][x-1]) == nullptr) {
 					rabbits[i]->setX(x - 1);
 				}
 				break;
 			case 3: // Right
-				if (x + 1 < width) {
+				if (x + 1 < width && dynamic_cast<Rabbit*>(field[y][x+1]) == nullptr) {
 					rabbits[i]->setX(x + 1);
 				}
 				break;
 			case 4: // Up-Left
-				if (y - 1 >= 0 && x - 1 >= 0) {
+				if (y - 1 >= 0 && x - 1 >= 0 && dynamic_cast<Rabbit*>(field[y-1][x-1]) == nullptr) {
 					rabbits[i]->setY(y - 1);
 					rabbits[i]->setX(x - 1);
 				}
 				break;
 			case 5: // Up-Right
-				if (y - 1 >= 0 && x + 1 < width) {
+				if (y - 1 >= 0 && x + 1 < width && dynamic_cast<Rabbit*>(field[y-1][x+1]) == nullptr) {
 					rabbits[i]->setY(y - 1);
 					rabbits[i]->setX(x + 1);
 				}
 				break;
 			case 6: // Down-Left
-				if (y + 1 < height && x - 1 >= 0) {
+				if (y + 1 < height && x - 1 >= 0 && dynamic_cast<Rabbit*>(field[y+1][x-1]) == nullptr) {
 					rabbits[i]->setY(y + 1);
 					rabbits[i]->setX(x - 1);
 				}
 				break;
 			case 7: // Down-Right
-				if (y + 1 < height && x + 1 < width) {
+				if (y + 1 < height && x + 1 < width && dynamic_cast<Rabbit*>(field[y+1][x+1]) == nullptr) {
 					rabbits[i]->setY(y + 1);
 					rabbits[i]->setX(x + 1);
 				}
@@ -293,8 +289,9 @@ void GameEngine::moveRabbits(){
 void  GameEngine::timerTick()
 {
     //Every 5 ticks or when timer is 0, a Rabbit spawns
-	if (timer==5 || timer==0)
-    { spawnRabbits();}
+	if (timer % 5 == 0){
+	spawnRabbits();
+	}
     timer=timer+1;
 }
 
@@ -372,6 +369,7 @@ void GameEngine::moveCptVertical(int direction){
 
 void GameEngine::moveCptHorizontal(int direction){
 	// Get the current position of the Captain
+
 	int x = captain->getX();
 	int y = captain->getY();
 
@@ -447,7 +445,7 @@ void GameEngine::moveCaptain(){
 	int y = captain->getY();
 
 	// Remove the Captain from the field
-	field[y][x] = nullptr;
+	
 
 	// Move the Captain based on user input
 	char direction;
@@ -460,28 +458,28 @@ void GameEngine::moveCaptain(){
 			if (y > 0) {
 				moveCptVertical(0);
 			} else {
-				cout << "Invalid move! You cannot move up." << endl;
+				cout << "Invalid move! You cannot move up. Captain Veggie ran into the wall and hit his head!" << endl;
 			}
 			break;
 		case 's': // Down
 			if (y < height - 1) {
 				moveCptVertical(1);
 			} else {
-				cout << "Invalid move! You cannot move down." << endl;
+				cout << "Invalid move! You cannot move down. Captain Veggie ran into the wall and hit his head!" << endl;
 			}
 			break;
 		case 'a': // Left
 			if (x > 0) {
 				moveCptHorizontal(0);
 			} else {
-				cout << "Invalid move! You cannot move left." << endl;
+				cout << "Invalid move! You cannot move left. Captain Veggie ran into the wall and hit his head!" << endl;
 			}
 			break;
 		case 'd': // Right
 			if (x < width - 1) {
 				moveCptHorizontal(1);
 			} else {
-				cout << "Invalid move! You cannot move right." << endl;
+				cout << "Invalid move! You cannot move right. Captain Veggie ran into the wall and hit his head!" << endl;
 			}
 			break;
 	}
@@ -490,35 +488,11 @@ void GameEngine::moveCaptain(){
 void GameEngine::gameOver(){
 	cout << "Game Over!" << endl;
 	cout << "You managed to harvest the following vegetables:" << endl;
+	// iterate through veggie pointers in vector
 	for (auto& veggie : captain->getCaptainVegs()) {
 		cout << veggie->getName() << endl;
 	}
 	cout << "Your score was: " << score << endl;
 	cout << "Remaining Veggies: " << remainingVeggies() << endl;
 	cout << "Thank you for playing Captain Veggie!" << endl;
-}
-
-
-
-int main(){
-	GameEngine game;
-	game.initializeGame();
-	game.intro();
-	/* int remainingVeggies;
-	remainingVeggies= game.remainingVeggies();
-	while (remainingVeggies!=0)
-
-	{
-		game.getScore();
-		game.printField();
-		game.moveRabbits();
-		game.moveCaptain();
-		remainingVeggies= game.remainingVeggies();
-		// ?? Increment the timer using the appropriate GameEngine function  
-	} */
-	
-	//game.initCaptain();
-	//game.initializeGame();
-	
-	return 0;
 }
