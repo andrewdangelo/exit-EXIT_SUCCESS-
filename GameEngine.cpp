@@ -183,6 +183,101 @@ void GameEngine::printField(){
 	return score;
 } */
 
+void  GameEngine::timerTick()
+{
+    if (timer==5 || timer==0)
+    { spawnRabbits();}
+    timer=timer+1;
+}
+
+void  GameEngine::moveCptHorizontal(int x)
+{
+    Captain captainOBJ=*captain;
+    if(field[captainOBJ.getX()][captainOBJ.getY()+x]==nullptr)
+    {
+        captainOBJ.setY(captainOBJ.getY()+1);
+        field[captainOBJ.getX()][captainOBJ.getY()]=nullptr;
+        field[captainOBJ.getX()][captainOBJ.getY()+x]=captain;
+    }
+    else if(dynamic_cast<Veggie*>(field[captainOBJ.getX()][captainOBJ.getY()+x])!=nullptr)
+    {
+        Veggie* ptr=dynamic_cast<Veggie*>(field[captainOBJ.getX()][captainOBJ.getY()+x]);
+        captainOBJ.addVeggie(ptr);
+        Veggie veg=*ptr;
+        cout<<veg.getName()<<", a delicious vegetable, has been found"<<endl;
+        score=score+ veg.getPoints();
+         //set the Captain object’s previous location in the field to nullptr
+		field[captainOBJ.getX()][captainOBJ.getY()]=nullptr;
+         //Assign the Captain object to the new location in the field
+		field[captainOBJ.getX()][captainOBJ.getY()+x]=captain;
+    }
+     else if(dynamic_cast<Rabbit*>(field[captainOBJ.getX()][captainOBJ.getY()+x])!=nullptr)
+    {
+     //Update the Captain object’s appropriate member variable?
+
+        //Remove that particular Rabbit object from the vector of Rabbit pointers
+		rabbits.pop_back();
+
+        cout<<"A rabbit has been found."<<endl;
+        score=score+ RABBITPOINTS;
+        //set the Captain object’s previous location in the field to nullptr
+		field[captainOBJ.getX()][captainOBJ.getY()]=nullptr;
+        //Assign the Captain object to the new location in the field
+		field[captainOBJ.getX()][captainOBJ.getY()+x]=captain;
+    }
+
+    else{}
+    
+
+    
+}
+
+void  GameEngine::moveCaptain()
+{
+    
+    int f_rows=height;
+    int f_cols=width;
+
+    Captain captainOBJ=*captain;
+    char move;
+    cout<<" Which direction to move the Captain?"<<endl;
+    cin>>move;
+    move=tolower(move);
+    switch (move) {
+        case 'w':
+
+            if(captainOBJ.getX()+1 <= f_rows)
+//{moveCptVertical(1);} 
+            cout << "Cannot move captain more upward." << endl;
+            else
+            cout << "Cannot move captain more upward." << endl;
+            break;
+        case 's':
+            if(captainOBJ.getX()-1 >= 0)
+            //{moveCptVertical(-1);} 
+            cout << "Cannot move captain more down." << endl;
+            else
+            cout << "Cannot move captain more down." << endl;
+            break;
+        case 'a':
+            if(captainOBJ.getY()-1 >= 0)
+            {moveCptHorizontal(-1);} 
+            else
+            cout << "Cannot move captain more left." << endl;
+            break;
+        case 'd':
+            if(captainOBJ.getY()+1 <= f_cols)
+            {moveCptHorizontal(1);} 
+            else
+            cout << "Cannot move captain more right." << endl;
+            break;
+        default:
+            cout << "Invalid move." << endl;
+    }
+
+}
+
+
 int main(){
 	GameEngine game;
 	game.initializeGame();
