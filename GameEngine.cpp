@@ -2,6 +2,8 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -110,7 +112,8 @@ void GameEngine::initCaptain(){
     } while (field[y][x] != nullptr);  // Continue if the spot is not empty
 
     // Create a new Captain object and add it to the field
-    field[y][x] = new Captain(x, y);
+	captain = new Captain(x, y);
+    field[y][x] = captain;
 }
 
 
@@ -286,6 +289,7 @@ void GameEngine::moveRabbits(){
 	}
 }
 
+
 void  GameEngine::timerTick()
 {
     //Every 5 ticks or when timer is 0, a Rabbit spawns
@@ -294,98 +298,147 @@ void  GameEngine::timerTick()
     timer=timer+1;
 }
 
-void  GameEngine::moveCptHorizontal(int x)
-{
-    //storing the captain object in a variable
-	Captain captainOBJ* =captain;
-	//if captain moves to empty slot
-    if(field[captainOBJ.getX()][captainOBJ.getY()+x]==nullptr)
-    {
-        captainOBJ.setY(captainOBJ.getY()+1);
-        field[captainOBJ.getX()][captainOBJ.getY()]=nullptr;
-        field[captainOBJ.getX()][captainOBJ.getY()+x]=captain;
-    }
-	//if captain moves to a veggie slot
-    else if(dynamic_cast<Veggie*>(field[captainOBJ.getX()][captainOBJ.getY()+x])!=nullptr)
-    {
-        Veggie* ptr=dynamic_cast<Veggie*>(field[captainOBJ.getX()][captainOBJ.getY()+x]);
-        captainOBJ.addVeggie(ptr);
-        //storing the veggie object from its obtained pointer
-		Veggie veg=*ptr;
-        cout<<veg.getName()<<", a delicious vegetable, has been found"<<endl;
-        score=score+ veg.getPoints();
-         //set the Captain object’s previous location in the field to nullptr
-		field[captainOBJ.getX()][captainOBJ.getY()]=nullptr;
-         //Assign the Captain object to the new location in the field
-		field[captainOBJ.getX()][captainOBJ.getY()+x]=captain;
-    }
-	//if captain moves to rabbit slot
-     else if(dynamic_cast<Rabbit*>(field[captainOBJ.getX()][captainOBJ.getY()+x])!=nullptr)
-    {
-     //Update the Captain object’s appropriate member variable?
-	// help here
-        //Remove that particular Rabbit object from the vector of Rabbit pointers
-		rabbits.pop_back();
+void GameEngine::moveCptVertical(int direction){
+	// Get the current position of the Captain
+	int x = captain->getX();
+	int y = captain->getY();
 
-        cout<<"A rabbit has been found."<<endl;
-        score=score+ RABBITPOINTS;
-        //set the Captain object’s previous location in the field to nullptr
-		field[captainOBJ.getX()][captainOBJ.getY()]=nullptr;
-        //Assign the Captain object to the new location in the field
-		field[captainOBJ.getX()][captainOBJ.getY()+x]=captain;
-    }
+	// Calculate the new position based on the direction
+	int newX = x;
+	int newY = y;
+	switch (direction) {
+		case 0: // Up
+			newY = y - 1;
+			break;
+		case 1: // Down
+			newY = y + 1;
+			break;
+	}
 
-    else{}
-    
+	// Check if the new position is within the field boundaries
+	if (newY >= 0 && newY < height) {
+		// Check if the new position is empty
+		if (field[newY][newX] == nullptr) {
+			// Update the Captain's position
+			captain->setY(newY);
 
-    
+			// Assign the Captain to the new location in the field
+			field[newY][newX] = captain;
+
+			// Set the previous location in the field to nullptr
+			field[y][x] = nullptr;
+		} else if (dynamic_cast<Veggie*>(field[newY][newX]) != nullptr) {
+			// Update the Captain's position
+			captain->setY(newY);
+
+			// Output that a delicious vegetable has been found
+			Veggie* veggie = dynamic_cast<Veggie*>(field[newY][newX]);
+			cout << "Yummy! A delicious " << veggie->getName()<< endl;
+
+			// Add the Veggie to the Captain's vector of Veggies
+			captain->addVeggie(veggie);
+
+			// Increment the player's score
+			score += veggie->getPoints();
+
+			// Assign the Captain to the new location in the field
+			field[newY][newX] = captain;
+
+			// Set the previous location in the field to nullptr
+			field[y][x] = nullptr;
+		} else if (dynamic_cast<Rabbit*>(field[newY][newX]) != nullptr) {
+			//The rabbit is in this location
+			// Update the Captain's position
+			captain->setY(newY);
+
+			// Output that the Captain has caught a rabbit
+			cout << "The Captain has caught one of the rabbits!" << endl;
+
+			// Remove the Rabbit from the vector of Rabbit pointers
+			Rabbit* rabbit = dynamic_cast<Rabbit*>(field[newY][newX]);
+			rabbits.erase(remove(rabbits.begin(), rabbits.end(), rabbit), rabbits.end());
+
+			// Increment the player's score
+			score += RABBITPOINTS;
+
+			// Assign the Captain to the new location in the field
+			field[newY][newX] = captain;
+
+			// Set the previous location in the field to nullptr
+			field[y][x] = nullptr;
+		}
+	}
 }
 
-void  GameEngine::moveCaptain()
-{
-    //storing field dimensions
-    int f_rows=height;
-    int f_cols=width;
-	//storing the captain object in a variable
-    Captain captainOBJ=*captain;
-    char move;
-    cout<<" Which direction to move the Captain?"<<endl;
-    cin>>move;
-	//for using lowercase...
-    move=tolower(move);
-	//switch case for moving according to user
-    switch (move) {
-        case 'w':
+void GameEngine::moveCptHorizontal(int direction){
+	// Get the current position of the Captain
+	int x = captain->getX();
+	int y = captain->getY();
 
-            if(captainOBJ.getX()+1 <= f_rows)
-//{moveCptVertical(1);}
-			cout << "Cannot move captain more upward." << endl;
-            else
-            cout << "Cannot move captain more upward." << endl;
-            break;
-        case 's':
-            if(captainOBJ.getX()-1 >= 0)
-			cout << "Cannot move captain more down." << endl;
-           // {moveCptVertical(-1);} 
-            else
-            cout << "Cannot move captain more down." << endl;
-            break;
-        case 'a':
-            if(captainOBJ.getY()-1 >= 0)
-            {moveCptHorizontal(-1);} 
-            else
-            cout << "Cannot move captain more left." << endl;
-            break;
-        case 'd':
-            if(captainOBJ.getY()+1 <= f_cols)
-            {moveCptHorizontal(1);} 
-            else
-            cout << "Cannot move captain more right." << endl;
-            break;
-        default:
-            cout << "Invalid move." << endl;
-    }
+	// Calculate the new position based on the direction
+	int newX = x;
+	int newY = y;
+	switch (direction) {
+		case 0: // Left
+			newX = x - 1;
+			break;
+		case 1: // Right
+			newX = x + 1;
+			break;
+	}
 
+	// Check if the new position is within the field boundaries
+	if (newX >= 0 && newX < width) {
+		// Check if the new position is empty
+		if (field[newY][newX] == nullptr) {
+			// Update the Captain's position
+			captain->setX(newX);
+
+			// Assign the Captain to the new location in the field
+			field[newY][newX] = captain;
+
+			// Set the previous location in the field to nullptr
+			field[y][x] = nullptr;
+		} else if (dynamic_cast<Veggie*>(field[newY][newX]) != nullptr) {
+			// Update the Captain's position
+			captain->setX(newX);
+
+			// Output that a delicious vegetable has been found
+			Veggie* veggie = dynamic_cast<Veggie*>(field[newY][newX]);
+			cout << "Yummy! A delicious " << veggie->getName()<< endl;
+
+			// Add the Veggie to the Captain's vector of Veggies
+			captain->addVeggie(veggie);
+
+			// Increment the player's score
+			score += veggie->getPoints();
+
+			// Assign the Captain to the new location in the field
+			field[newY][newX] = captain;
+
+			// Set the previous location in the field to nullptr
+			field[y][x] = nullptr;
+		} else if (dynamic_cast<Rabbit*>(field[newY][newX]) != nullptr) {
+			//The rabbit is in this location
+			// Update the Captain's position
+			captain->setX(newX);
+
+			// Output that the Captain has caught a rabbit
+			cout << "The Captain has caught one of the rabbits!" << endl;
+
+			// Remove the Rabbit from the vector of Rabbit pointers
+			Rabbit* rabbit = dynamic_cast<Rabbit*>(field[newY][newX]);
+			rabbits.erase(remove(rabbits.begin(), rabbits.end(), rabbit), rabbits.end());
+			// Increment the player's score
+			score += RABBITPOINTS;
+
+			// Assign the Captain to the new location in the field
+			field[newY][newX] = captain;
+
+			// Set the previous location in the field to nullptr
+			field[y][x] = nullptr;
+		}
+	}
 }
 
 
