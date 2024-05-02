@@ -199,9 +199,92 @@ void GameEngine::printField(){
 
 }
 
-/*int GameEngine::getScore(){
+int GameEngine::getScore() {
 	return score;
-} */
+}
+
+void GameEngine::moveRabbits(){
+	for (int i = 0; i < rabbits.size(); i++) {
+		// Generate random direction
+		int direction = rand() % 8;
+
+		// Get the current position of the rabbit
+		int x = rabbits[i]->getX();
+		int y = rabbits[i]->getY();
+
+		// Remove the rabbit from the field
+		field[y][x] = nullptr;
+
+		// Move the rabbit in the chosen direction
+		switch (direction) {
+			case 0: // Up
+				if (y - 1 >= 0) {
+					rabbits[i]->setY(y - 1);
+				}
+				break;
+			case 1: // Down
+				if (y + 1 < height) {
+					rabbits[i]->setY(y + 1);
+				}
+				break;
+			case 2: // Left
+				if (x - 1 >= 0) {
+					rabbits[i]->setX(x - 1);
+				}
+				break;
+			case 3: // Right
+				if (x + 1 < width) {
+					rabbits[i]->setX(x + 1);
+				}
+				break;
+			case 4: // Up-Left
+				if (y - 1 >= 0 && x - 1 >= 0) {
+					rabbits[i]->setY(y - 1);
+					rabbits[i]->setX(x - 1);
+				}
+				break;
+			case 5: // Up-Right
+				if (y - 1 >= 0 && x + 1 < width) {
+					rabbits[i]->setY(y - 1);
+					rabbits[i]->setX(x + 1);
+				}
+				break;
+			case 6: // Down-Left
+				if (y + 1 < height && x - 1 >= 0) {
+					rabbits[i]->setY(y + 1);
+					rabbits[i]->setX(x - 1);
+				}
+				break;
+			case 7: // Down-Right
+				if (y + 1 < height && x + 1 < width) {
+					rabbits[i]->setY(y + 1);
+					rabbits[i]->setX(x + 1);
+				}
+				break;
+		}
+
+		// Check if the rabbit has landed on a Captain or Veggie
+		if (dynamic_cast<Captain*>(field[y][x]) != nullptr) {
+			// Remove the Captain from the field
+			field[y][x] = nullptr;
+
+			// Add the rabbit to the field
+			field[rabbits[i]->getY()][rabbits[i]->getX()] = rabbits[i];
+
+			// Update the score
+			score -= RABBITPOINTS;
+		} else if (dynamic_cast<Veggie*>(field[y][x]) != nullptr) {
+			// Remove the Veggie from the field
+			field[y][x] = nullptr;
+
+			// Add the rabbit to the field
+			field[rabbits[i]->getY()][rabbits[i]->getX()] = rabbits[i];
+		} else {
+			// Add the rabbit to the field
+			field[rabbits[i]->getY()][rabbits[i]->getX()] = rabbits[i];
+		}
+	}
+}
 
 void  GameEngine::timerTick()
 {
@@ -214,7 +297,7 @@ void  GameEngine::timerTick()
 void  GameEngine::moveCptHorizontal(int x)
 {
     //storing the captain object in a variable
-	Captain captainOBJ=*captain;
+	Captain captainOBJ* =captain;
 	//if captain moves to empty slot
     if(field[captainOBJ.getX()][captainOBJ.getY()+x]==nullptr)
     {
@@ -309,11 +392,8 @@ void  GameEngine::moveCaptain()
 
 int main(){
 	GameEngine game;
-	cout << "Before initializeGame()" << endl;
 	game.initializeGame();
-	cout << "After initializeGame(), before intro()" << endl;
 	game.intro();
-	cout << "After intro()" << endl;
 	/* int remainingVeggies;
 	remainingVeggies= game.remainingVeggies();
 	while (remainingVeggies!=0)
