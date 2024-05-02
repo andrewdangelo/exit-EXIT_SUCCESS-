@@ -68,6 +68,7 @@ void GameEngine::initVeggies(){
 		field[i] = new FieldInhabitant*[width];
 		for(int j = 0; j < width; j++) {
 			field[i][j] = nullptr;
+			
 		}
 	}
 
@@ -193,25 +194,30 @@ void GameEngine::printField(){
 
 void  GameEngine::timerTick()
 {
-    if (timer==5 || timer==0)
+    //Every 5 ticks or when timer is 0, a Rabbit spawns
+	if (timer==5 || timer==0)
     { spawnRabbits();}
     timer=timer+1;
 }
 
 void  GameEngine::moveCptHorizontal(int x)
 {
-    Captain captainOBJ=*captain;
+    //storing the captain object in a variable
+	Captain captainOBJ=*captain;
+	//if captain moves to empty slot
     if(field[captainOBJ.getX()][captainOBJ.getY()+x]==nullptr)
     {
         captainOBJ.setY(captainOBJ.getY()+1);
         field[captainOBJ.getX()][captainOBJ.getY()]=nullptr;
         field[captainOBJ.getX()][captainOBJ.getY()+x]=captain;
     }
+	//if captain moves to a veggie slot
     else if(dynamic_cast<Veggie*>(field[captainOBJ.getX()][captainOBJ.getY()+x])!=nullptr)
     {
         Veggie* ptr=dynamic_cast<Veggie*>(field[captainOBJ.getX()][captainOBJ.getY()+x]);
         captainOBJ.addVeggie(ptr);
-        Veggie veg=*ptr;
+        //storing the veggie object from its obtained pointer
+		Veggie veg=*ptr;
         cout<<veg.getName()<<", a delicious vegetable, has been found"<<endl;
         score=score+ veg.getPoints();
          //set the Captain object’s previous location in the field to nullptr
@@ -219,10 +225,11 @@ void  GameEngine::moveCptHorizontal(int x)
          //Assign the Captain object to the new location in the field
 		field[captainOBJ.getX()][captainOBJ.getY()+x]=captain;
     }
+	//if captain moves to rabbit slot
      else if(dynamic_cast<Rabbit*>(field[captainOBJ.getX()][captainOBJ.getY()+x])!=nullptr)
     {
      //Update the Captain object’s appropriate member variable?
-
+	// help here
         //Remove that particular Rabbit object from the vector of Rabbit pointers
 		rabbits.pop_back();
 
@@ -242,28 +249,28 @@ void  GameEngine::moveCptHorizontal(int x)
 
 void  GameEngine::moveCaptain()
 {
-    
+    //storing field dimensions
     int f_rows=height;
     int f_cols=width;
-
+	//storing the captain object in a variable
     Captain captainOBJ=*captain;
     char move;
     cout<<" Which direction to move the Captain?"<<endl;
     cin>>move;
+	//for using lowercase...
     move=tolower(move);
+	//switch case for moving according to user
     switch (move) {
         case 'w':
 
             if(captainOBJ.getX()+1 <= f_rows)
-//{moveCptVertical(1);} 
-            cout << "Cannot move captain more upward." << endl;
+            {moveCptVertical(1);} 
             else
             cout << "Cannot move captain more upward." << endl;
             break;
         case 's':
             if(captainOBJ.getX()-1 >= 0)
-            //{moveCptVertical(-1);} 
-            cout << "Cannot move captain more down." << endl;
+            {moveCptVertical(-1);} 
             else
             cout << "Cannot move captain more down." << endl;
             break;
@@ -286,12 +293,26 @@ void  GameEngine::moveCaptain()
 }
 
 
+
 int main(){
 	GameEngine game;
 	game.initializeGame();
 	game.intro();
+	int remainingVeggies;
+	remainingVeggies= game.remainingVeggies();
+	while (remainingVeggies!=0)
+
+	{
+		game.getScore();
+		game.printField();
+		game.moveRabbits();
+		game.moveCaptain();
+		remainingVeggies= game.remainingVeggies();
+		// ?? Increment the timer using the appropriate GameEngine function  
+	}
+	
 	//game.initCaptain();
 	//game.initializeGame();
-	//game.printField();
+	
 	return 0;
 }
