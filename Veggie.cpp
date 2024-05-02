@@ -3,6 +3,7 @@
 Veggie::Veggie(string symbol, string name, int points) : FieldInhabitant(symbol){
 	this -> points = points;
 	this -> name = name;
+	this -> symbol = symbol;
 }
 
 string Veggie::getName(){

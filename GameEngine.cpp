@@ -8,13 +8,16 @@ using namespace std;
 
 void GameEngine::initializeGame(){
 	//initVeggies() called
+	cout << "Before initVeggies()" << endl;
 	initVeggies();
+	cout << "After initVeggies()" << endl;
 
 	//initCaptain() called
+	cout << "Before initCaptain()" << endl;
 	initCaptain();
+	cout << "After initCaptain()" << endl;
 	score = 0;
 	timer = 0;
-
 }
 
 void GameEngine::initVeggies(){
@@ -54,16 +57,18 @@ void GameEngine::initVeggies(){
 		size_t commaPos2 = line.find(',', commaPos1 + 1);
 
 		// Extract the name, symbol, and points from the line
-		string symbol = line.substr(0, commaPos1);
-		string name = line.substr(commaPos1 + 1, commaPos2 - commaPos1 - 1);
+		string name = line.substr(0, commaPos1);
+		string symbol = line.substr(commaPos1 + 1, commaPos2 - commaPos1 - 1);
 		int points = stoi(line.substr(commaPos2 + 1));
 
 		// Create a new Veggie object and add it to the vector
 		veggies.push_back(Veggie(name, symbol, points));
 	}
 
+	file.close();
+
 	// Create 2D dynamic array of FieldInhabitant pointers
-	FieldInhabitant*** field = new FieldInhabitant**[height];
+	field = new FieldInhabitant**[height];
 	for(int i = 0; i < height; i++) {
 		field[i] = new FieldInhabitant*[width];
 		for(int j = 0; j < width; j++) {
@@ -96,27 +101,43 @@ void GameEngine::initVeggies(){
 		}
 	}
 
-	file.close();
+	// Output the field
+	cout << "Field after initializing veggies:" << endl;
+	for(int i = 0; i < width; i++){
+		cout << "#";
+	}
+	cout << endl;
+	for(int i = 0; i < height; i++){
+		for(int j = 0; j < width; j++){
+			if(field[i][j] == nullptr){
+				cout << " ";
+			} else {
+				cout << field[i][j]->getSymbol();
+			}
+		}
+		cout << endl;
+	}
+	for(int i = 0; i < width; i++){
+		cout << "#";
+	}
+	cout << endl;
 }
 
+
 void GameEngine::initCaptain(){
-	// Create a new Captain object
-	// Generate random coordinates for the Captain
+    srand(time(0));
 
-	srand(time(0));
+    int x, y;
 
-	int x = rand() % width;
-	int y = rand() % height;
+    // Keep trying random positions until an empty one is found
+    do {
+        x = rand() % width;
+        y = rand() % height;
 
-	// Check if the location is occupied
-	while (field[y][x] != nullptr) {
-		// Choose a new random location
-		x = rand() % width;
-		y = rand() % height;
-	}
+    } while (field[y][x] != nullptr);  // Continue if the spot is not empty
 
-	// Create a new Captain object and add it to the field
-	field[y][x] = new Captain(x, y);
+    // Create a new Captain object and add it to the field
+    field[y][x] = new Captain(x, y);
 }
 
 
@@ -172,8 +193,8 @@ void GameEngine::intro(){
 		cout << "Name: " << veggie.getName() << ", Symbol: " << veggie.getSymbol() << ", Points: " << veggie.getPoints() << endl;
 	}
 
-	cout << "Captain Symbol: " << captain->getSymbol() << endl;
-	cout << "Rabbit Symbol: " << rabbits[0].getSymbol() << endl;
+	//cout << "Captain Symbol: " << captain->getSymbol() << endl;
+	//cout << "Rabbit Symbol: " << rabbits[0].getSymbol() << endl;
 }
 
 void GameEngine::printField(){
@@ -264,13 +285,15 @@ void  GameEngine::moveCaptain()
         case 'w':
 
             if(captainOBJ.getX()+1 <= f_rows)
-            {moveCptVertical(1);} 
+//{moveCptVertical(1);}
+			cout << "Cannot move captain more upward." << endl;
             else
             cout << "Cannot move captain more upward." << endl;
             break;
         case 's':
             if(captainOBJ.getX()-1 >= 0)
-            {moveCptVertical(-1);} 
+			cout << "Cannot move captain more down." << endl;
+           // {moveCptVertical(-1);} 
             else
             cout << "Cannot move captain more down." << endl;
             break;
@@ -296,9 +319,12 @@ void  GameEngine::moveCaptain()
 
 int main(){
 	GameEngine game;
+	cout << "Before initializeGame()" << endl;
 	game.initializeGame();
+	cout << "After initializeGame(), before intro()" << endl;
 	game.intro();
-	int remainingVeggies;
+	cout << "After intro()" << endl;
+	/* int remainingVeggies;
 	remainingVeggies= game.remainingVeggies();
 	while (remainingVeggies!=0)
 
@@ -309,7 +335,7 @@ int main(){
 		game.moveCaptain();
 		remainingVeggies= game.remainingVeggies();
 		// ?? Increment the timer using the appropriate GameEngine function  
-	}
+	} */
 	
 	//game.initCaptain();
 	//game.initializeGame();
