@@ -17,6 +17,7 @@ private:
 	int height, width, score, timer;
 	Captain* captain;
 	vector<Rabbit> rabbits;
+	vector<Veggie> veggies;
 
 	void initVeggies(); //Andrews
 	void initCaptain(); 

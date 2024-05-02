@@ -14,6 +14,7 @@ void GameEngine::initializeGame(){
 	initCaptain();
 	score = 0;
 	timer = 0;
+
 }
 
 void GameEngine::initVeggies(){
@@ -59,11 +60,6 @@ void GameEngine::initVeggies(){
 
 		// Create a new Veggie object and add it to the vector
 		veggies.push_back(Veggie(name, symbol, points));
-	}
-
-	// Print the vector of veggies (for testing)
-	for (auto& veggie : veggies) {
-		cout << "Name: " << veggie.getName() << ", Symbol: " << veggie.getSymbol()<< ", Points: " << veggie.getPoints() << endl;
 	}
 
 	// Create 2D dynamic array of FieldInhabitant pointers
@@ -163,8 +159,20 @@ int GameEngine::remainingVeggies(){
 	return vegetableCount;
 }
 
-/* void GameEngine::intro(){
+void GameEngine::intro(){
+	cout << "Welcome to Captain Veggie!" << endl;
+	cout << "The rabbits are invading your garden and you must harvest" << endl;
+	cout << "as many vegetables as possible before the rabbits eat them" << endl;
+	cout << "all! Each vegetable is worth a different number of points" << endl;
+	cout << "so go for the high score!" << endl;
 
+	cout << "Possible Vegetables:" << endl;
+	for (auto& veggie : veggies) {
+		cout << "Name: " << veggie.getName() << ", Symbol: " << veggie.getSymbol() << ", Points: " << veggie.getPoints() << endl;
+	}
+
+	cout << "Captain Symbol: " << captain->getSymbol() << endl;
+	cout << "Rabbit Symbol: " << rabbits[0].getSymbol() << endl;
 }
 
 void GameEngine::printField(){
@@ -281,6 +289,7 @@ void  GameEngine::moveCaptain()
 int main(){
 	GameEngine game;
 	game.initializeGame();
+	game.intro();
 	//game.initCaptain();
 	//game.initializeGame();
 	//game.printField();
