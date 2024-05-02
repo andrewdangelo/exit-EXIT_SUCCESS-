@@ -11,7 +11,7 @@ Captain::Captain(int x, int y) : Creature(x, y, "V") {
  }
 
     vector<Veggie*> Captain::getCaptainVegs()
-        {return VegObs;}
+        {return veggies;}
    void Captain::addVeggie(Veggie* veg){
-        VegObs.push_back(veg);
+        veggies.push_back(veg);
     };

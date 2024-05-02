@@ -8,12 +8,8 @@ using namespace std;
 
 void GameEngine::initializeGame(){
 	//initVeggies() called
-	cout << "Before initVeggies()" << endl;
 	initVeggies();
-	cout << "After initVeggies()" << endl;
 
-	//initCaptain() called
-	cout << "Before initCaptain()" << endl;
 	initCaptain();
 	cout << "After initCaptain()" << endl;
 	score = 0;
@@ -47,9 +43,6 @@ void GameEngine::initVeggies(){
 	height = stoi(line.substr(commaPos + 1));
 	width = stoi(line.substr(commaPos + 1 + line.substr(commaPos + 1).find(',') + 1));
 
-	// Create vector to store Veggie objects
-	vector<Veggie> veggies;
-
 	// Read veggie lines from file
 	while (getline(file, line)) {
 		// Find the position of the comma separators
@@ -62,7 +55,7 @@ void GameEngine::initVeggies(){
 		int points = stoi(line.substr(commaPos2 + 1));
 
 		// Create a new Veggie object and add it to the vector
-		veggies.push_back(Veggie(name, symbol, points));
+		veggies.push_back(new Veggie(name, symbol, points));
 	}
 
 	file.close();
@@ -91,10 +84,10 @@ void GameEngine::initVeggies(){
 		if (field[y][x] == nullptr) {
 			// Choose a random Veggie from the vector
 			int index = rand() % veggies.size();
-			Veggie chosenVeggie = veggies[index];
+			Veggie* chosenVeggie = veggies[index];
 
 			// Create a new Veggie object and add it to the field
-			field[y][x] = new Veggie(chosenVeggie.getName(), chosenVeggie.getSymbol(), chosenVeggie.getPoints());
+			field[y][x] = new Veggie(chosenVeggie->getName(), chosenVeggie->getSymbol(), chosenVeggie->getPoints());
 
 			// Decrease the number of remaining Veggies
 			numberOfVeggies--;
@@ -158,7 +151,7 @@ void GameEngine::spawnRabbits(){
 				// Create a new Rabbit object and add it to the field and vector of rabbits
 				Rabbit newRabbit(x, y);
 				field[y][x] = &newRabbit;
-				rabbits.push_back(newRabbit);
+				rabbits.push_back(&newRabbit);
 
 				// Decrease the number of remaining rabbits
 				numberOfRabbits--;
@@ -190,10 +183,10 @@ void GameEngine::intro(){
 
 	cout << "Possible Vegetables:" << endl;
 	for (auto& veggie : veggies) {
-		cout << "Name: " << veggie.getName() << ", Symbol: " << veggie.getSymbol() << ", Points: " << veggie.getPoints() << endl;
+		cout << "Name: " << veggie->getName() << ", Symbol: " << veggie->getSymbol() << ", Points: " << veggie->getPoints() << endl;
 	}
 
-	//cout << "Captain Symbol: " << captain->getSymbol() << endl;
+	cout << "Captain Symbol: " << captain->getSymbol() << endl;
 	//cout << "Rabbit Symbol: " << rabbits[0].getSymbol() << endl;
 }
 

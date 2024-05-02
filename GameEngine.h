@@ -16,8 +16,8 @@ private:
 	FieldInhabitant*** field;
 	int height, width, score, timer;
 	Captain* captain;
-	vector<Rabbit> rabbits;
-	vector<Veggie> veggies;
+	vector<Rabbit*> rabbits;
+	vector<Veggie*> veggies;
 
 	void initVeggies(); //Andrews
 	void initCaptain(); 

@@ -17,7 +17,7 @@ using namespace std;
 
 class Captain : public Creature {
     private:
-    vector<Veggie*> VegObs;
+    vector<Veggie*> veggies;
     public:
     Captain(int x,int y);
     

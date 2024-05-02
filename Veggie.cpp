@@ -1,6 +1,6 @@
 #include "Veggie.h"
 
-Veggie::Veggie(string symbol, string name, int points) : FieldInhabitant(symbol){
+Veggie::Veggie(string name, string symbol, int points) : FieldInhabitant(symbol){
 	this -> points = points;
 	this -> name = name;
 	this -> symbol = symbol;
