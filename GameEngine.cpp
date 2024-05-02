@@ -11,7 +11,7 @@ void GameEngine::initializeGame(){
 	initVeggies();
 
 	//initCaptain() called
-	//initCaptain();
+	initCaptain();
 	score = 0;
 	timer = 0;
 }
@@ -21,13 +21,13 @@ void GameEngine::initVeggies(){
 	ifstream file;
 
 	// Prompt user for veggie file name
-	cout << "Enter the name of the veggie file: ";
+	cout << "Please enter the name of the vegetable point file: ";
 	cin >> filename;
 
 	// Check if file exists
 	file.open(filename);
 	while (!file.is_open()) {
-		cout << "File not found. Enter a valid veggie file name: ";
+		cout << "VeggieFile does not exist! Please enter the name of the vegetable point file: ";
 		cin >> filename;
 		file.open(filename);
 	}
@@ -102,6 +102,53 @@ void GameEngine::initVeggies(){
 	file.close();
 }
 
+void GameEngine::initCaptain(){
+	// Create a new Captain object
+	// Generate random coordinates for the Captain
+
+	srand(time(0));
+
+	int x = rand() % width;
+	int y = rand() % height;
+
+	// Check if the location is occupied
+	while (field[y][x] != nullptr) {
+		// Choose a new random location
+		x = rand() % width;
+		y = rand() % height;
+	}
+
+	// Create a new Captain object and add it to the field
+	field[y][x] = new Captain(x, y);
+}
+
+
+void GameEngine::spawnRabbits(){
+	if (rabbits.size() < MAXNUMBEROFRABBITS) {
+
+		// Seed the random number generator
+		srand(time(0));
+
+		int numberOfRabbits = MAXNUMBEROFRABBITS - rabbits.size();
+		while (numberOfRabbits > 0) {
+			// Generate random coordinates
+			int x = rand() % width;
+			int y = rand() % height;
+
+			// Check if the location is occupied
+			if (field[y][x] == nullptr) {
+				// Create a new Rabbit object and add it to the field and vector of rabbits
+				Rabbit newRabbit(x, y);
+				field[y][x] = &newRabbit;
+				rabbits.push_back(newRabbit);
+
+				// Decrease the number of remaining rabbits
+				numberOfRabbits--;
+			}
+		}
+	}
+}
+
 /* void GameEngine::intro(){
 
 }
@@ -125,6 +172,7 @@ void GameEngine::printField(){
 int main(){
 	GameEngine game;
 	game.initializeGame();
+	//game.initCaptain();
 	//game.initializeGame();
 	//game.printField();
 	return 0;

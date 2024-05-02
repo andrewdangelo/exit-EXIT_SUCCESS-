@@ -2,7 +2,7 @@
 
 Rabbit::Rabbit(int x, int y) : Creature(x, y, "R") {
     // Constructor implementation
-    this-> x = x;
+    this->x = x;
     this->y = y;
 }
 
