@@ -149,6 +149,20 @@ void GameEngine::spawnRabbits(){
 	}
 }
 
+int GameEngine::remainingVeggies(){
+	int vegetableCount = 0;
+	for (int i = 0; i < height; i++) {
+		for (int j = 0; j < width; j++) {
+			
+			// Make sure its a veggie object
+			if (dynamic_cast<Veggie*>(field[i][j]) != nullptr) {
+				vegetableCount++;
+			}
+		}
+	}
+	return vegetableCount;
+}
+
 /* void GameEngine::intro(){
 
 }
