@@ -93,27 +93,7 @@ void GameEngine::initVeggies(){
 			numberOfVeggies--;
 		}
 	}
-
-	// Output the field
-	cout << "Field after initializing veggies:" << endl;
-	for(int i = 0; i < width; i++){
-		cout << "#";
-	}
-	cout << endl;
-	for(int i = 0; i < height; i++){
-		for(int j = 0; j < width; j++){
-			if(field[i][j] == nullptr){
-				cout << " ";
-			} else {
-				cout << field[i][j]->getSymbol();
-			}
-		}
-		cout << endl;
-	}
-	for(int i = 0; i < width; i++){
-		cout << "#";
-	}
-	cout << endl;
+	printField();
 }
 
 
@@ -186,19 +166,36 @@ void GameEngine::intro(){
 		cout << "Name: " << veggie->getName() << ", Symbol: " << veggie->getSymbol() << ", Points: " << veggie->getPoints() << endl;
 	}
 
-	cout << "Captain Symbol: " << captain->getSymbol() << endl;
+	//cout << "Captain Symbol: " << captain->getSymbol() << endl;
 	//cout << "Rabbit Symbol: " << rabbits[0].getSymbol() << endl;
+
+	cout << "Catching a rabbit is worth 5 points, but more are always on the way!" << endl;
+	cout << "Good luck!" << endl;
 }
 
 void GameEngine::printField(){
 	// TODO: add border
 
-	for(int i = 0; i < height; i++){
-		for(int j = 0; j < width; j++){
-			cout << field[i][j] -> getSymbol();
-		}
-		cout << '\n';
+	for(int i = 0; i < width + 2; i++){
+		cout << "# ";
 	}
+	cout << endl;
+	for(int i = 0; i < height; i++){
+		cout << "# ";
+		for(int j = 0; j < width; j++){
+			if(field[i][j] == nullptr){
+				cout << " ";
+			} else {
+				cout << field[i][j]->getSymbol();
+			}
+			cout << " ";
+		}
+		cout << "#" << endl;
+	}
+	for(int i = 0; i < width + 2; i++){
+		cout << "# ";
+	}
+	cout << endl;
 
 }
 
