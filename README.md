@@ -4,7 +4,7 @@ Welcome to Captain Veggie. A C++ based shell game where you play as Captain Vegg
 
 ## Setup
 
-Extract the zip folder in the release to a folder of your choice, or pull the repository, and compile
+Extract the zip folder in the release to a folder of your choice, or clone the repository, and compile
 "g++ -std=c++17 GameEngine.cpp Rabbit.cpp Captain.cpp FieldInhabitant.cpp Creature.cpp Veggie.cpp main.cpp".
 You must be using C++ 11 or newer.
 
